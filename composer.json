@@ -1,0 +1,30 @@
+{
+	"name": "sasin91/wow-emulator-communication",
+    "description": "Provides a fluent API for communication with WoW Emulators.",
+    "keywords": ["framework", "laravel", "Emulators", "WoW", "World of Warcraft", "Private server"],
+    "license": "MIT",
+    "type": "package",
+
+    "require": {
+        "orchestra/testbench": "^3.4",
+        "clue/socket-raw": "^1.2",
+        "artisaninweb/laravel-soap": "0.3.0.7",
+        "illuminate/support": "^5.4",
+        "illuminate/contracts": "^5.4",
+        "illuminate/container": "^5.4",
+        "phpunit/phpunit": "^6.1"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Sasin91\\WoWEmulatorCommunication\\": "src/",
+            "Sasin91\\WoWEmulatorCommunication\\Tests\\": "tests/"
+        }
+    },
+
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}
