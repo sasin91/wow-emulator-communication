@@ -6,6 +6,22 @@ use Sasin91\WoWEmulatorCommunication\Testing\AssertCommandPassed;
 use Sasin91\WoWEmulatorCommunication\Testing\FakeSoapClient;
 
 return [
+	
+	/*
+    |--------------------------------------------------------------------------
+    | Emulator command proxying
+    |--------------------------------------------------------------------------
+    |
+    | Here you may enable command proxying feature,
+    | this allows for an expressive and fluent access to emulator drivers,
+    |
+    | Using the TrinityCore driver as an example, where you would write,
+    | \Emulators::driver('TrinityCore')->$method(...$parameters),
+    | you can now write \Emulators\TrinityCore::$method(...$parameters).
+    |
+    */
+	'proxy-driver-commands' =>	false,	
+
 	/*
     |--------------------------------------------------------------------------
     | Default Emulator driver

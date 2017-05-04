@@ -52,10 +52,6 @@ class EmulatorServiceProvider extends ServiceProvider
         $this->registerGenericDrivers();    
 
         $this->aliasCommunicationPipes();
-
-        // check whether auto-facade emulator is true
-        // create a real-time facade to the drivers.
-        // register the facade with the container.
     }
 
     protected function registerEmulatorManagerAndAliasFacade()

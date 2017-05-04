@@ -89,7 +89,7 @@ class EmulatorCommunicationDriver
 	}
 
 	/**
-	 * Dispatch a command
+	 * Alias for fire.
 	 * 
 	 * @param   EmulatorCommand|string  $command
      * @param   mixed                   $parameters
@@ -97,8 +97,20 @@ class EmulatorCommunicationDriver
 	 */
 	public function command($command, $parameters = null)
 	{
+		return $this->fire($command, $parameters);
+	}
+
+	/**
+	 * Dispatch a command
+	 * 
+	 * @param   EmulatorCommand|string  $command
+     * @param   mixed                   $parameters
+	 * @return  mixed 	                Response from remote API.
+	 */
+	public function fire($command, $parameters = null)
+	{
 		return (new CommunicationPipeline)
-		    ->send($this->preparedCommand($command, Arr::wrap($parameters)))
+		    ->send($this->preparedCommand($command, $parameters))
 		    ->through(Arr::get($this->config, 'pipes', []))
 		    ->then($this->executeCommand());
 	}

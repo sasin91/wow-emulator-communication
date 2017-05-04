@@ -48,6 +48,9 @@ class DispatchingCommandsTest extends TestCase
 
 	    // Setup testing-multiple driver
 	    $config->set('emulator.drivers.multiple-testing', ['testing']);
+
+	    // Enable driver command proxying
+	    $config->set('emulator.proxy-driver-commands', true);
 	}
 
     /**
@@ -66,6 +69,8 @@ class DispatchingCommandsTest extends TestCase
 				$driver, $this->manager->genericDriverCallback($driver)
 			);
 		}
+
+		\Emulators::swap($this->manager);
 	}
 
 	/**
@@ -80,7 +85,7 @@ class DispatchingCommandsTest extends TestCase
 	{
 		$this->assertEquals(
 			'Hello world',
-			$this->manager->command(new EmulatorCommand('Hello', ['world']))
+			\Emulators::command(new EmulatorCommand('Hello', ['world']))
 		);
 	}
 
@@ -95,7 +100,7 @@ class DispatchingCommandsTest extends TestCase
 	 */
 	public function it_can_dispatch_a_command_across_multiple_emulators()
 	{
-		$results = $this->manager->driver('multiple-testing')->command(new EmulatorCommand('Hello world'));
+		$results = \Emulators::dispatchTo('multiple-testing', new EmulatorCommand('Hello world'));
 
 		$results->each(function ($response) {
 			$this->assertEquals('Hello world', $response);
@@ -112,7 +117,20 @@ class DispatchingCommandsTest extends TestCase
 		$command = (new EmulatorCommand('Hello world', ['parameter1', 'parameter2']))->useDelimiter(', ');
 		$this->assertEquals(
 			'Hello world parameter1, parameter2',
-			$this->manager->command($command)
+			\Emulators::fire($command)
+		);
+	}
+
+	/**
+	 * @covers Sasin91\WoWEmulatorCommunication\Facades\Emulators::__callStatic($method, $args)
+	 *
+	 * @test
+	 */
+	public function it_proxies_dynamic_commands()
+	{
+		$this->assertEquals(
+			"hello world how is it spinning?",
+			\Emulators::Testing('hello world', 'how is it spinning?')
 		);
 	}
 }

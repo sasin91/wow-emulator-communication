@@ -42,7 +42,7 @@ class EmulatorCommand
 	public function __construct(string $command, $parameters = [], $delimiter = ' ')
 	{
 		$this->command = $command;
-		$this->parameters = $parameters;
+		$this->parameters = Arr::wrap($parameters);
 		$this->delimiter = $delimiter;
 	}
 
