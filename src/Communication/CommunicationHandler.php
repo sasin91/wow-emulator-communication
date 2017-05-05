@@ -13,7 +13,7 @@ interface CommunicationHandler
     public function handle($command);
 
     /**
-     * Configure the Communicator.
+     * Configure the Communication handler.
      *
      * @param  string $client 
      * @param  array  $options

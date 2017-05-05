@@ -2,10 +2,8 @@
 
 namespace Sasin91\WoWEmulatorCommunication;
 
-use Artisaninweb\SoapWrapper\SoapWrapper;
 use Illuminate\Support\Manager;
 use Illuminate\Support\Str;
-use Sasin91\WoWEmulatorCommunication\Communication\SoapCommunicator;
 use Sasin91\WoWEmulatorCommunication\Drivers\EmulatorCommunicationDriver;
 
 /**
@@ -42,7 +40,7 @@ class EmulatorManager extends Manager
      * Create multiple drivers and return a collection which proxy maps dynamic calls to them.
      * 
      * @param  string $driver
-     * @return EmulatorDriverCollection
+     * @return \Sasin91\WoWEmulatorCommunication\EmulatorDriverCollection
      */
     public function createMultipleDriver($driver = null)
     {
@@ -70,9 +68,9 @@ class EmulatorManager extends Manager
     /**
      * A generic Emulator communication driver,
      * this is the default driver unless otherwise specified.
-     * 
+     *
      * @param  string $emulator
-     * @return EmulatorCommunicationDriver
+     * @return \Sasin91\WoWEmulatorCommunication\Drivers\EmulatorCommunicationContract
      */
     public function useGenericDriverFor($emulator)
     {

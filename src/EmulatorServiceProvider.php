@@ -2,24 +2,23 @@
 
 namespace Sasin91\WoWEmulatorCommunication;
 
-use App\TrinityCore\Communication\CommunicatorContract;
-use App\TrinityCore\Communication\RemoteAccess;
-use App\TrinityCore\Communication\Soap;
-use Artisaninweb\SoapWrapper\Service;
-use Artisaninweb\SoapWrapper\SoapWrapper;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
-use Sasin91\WoWEmulatorCommunication\Command\Validators\CommandPresenceValidator;
-use Sasin91\WoWEmulatorCommunication\Communication\SoapCommunicator;
-use Sasin91\WoWEmulatorCommunication\Communication\SocketCommunicator;
-use Sasin91\WoWEmulatorCommunication\Communication\TrinityCore\TrinityCoreRemoteAccessCommunicator;
-use Sasin91\WoWEmulatorCommunication\Communication\TrinityCore\TrinityCoreSoapCommunicator;
-use Sasin91\WoWEmulatorCommunication\EmulatorManager;
 use Sasin91\WoWEmulatorCommunication\Facades\Emulators;
-use Socket\Raw\Factory;
 
+/**
+ * Emulator Communication service provider.
+ *
+ * This provider enables communication to WoW emulators,
+ * through the \Emulators Facade or optionally, by injecting the EmulatorManager.
+ */
 class EmulatorServiceProvider extends ServiceProvider
 {
+    /**
+     * Services provided by the service provider.
+     * 
+     * @var array
+     */
     protected $provides = [];
 
     /**
@@ -47,13 +46,18 @@ class EmulatorServiceProvider extends ServiceProvider
 
         $this->registerEmulatorManagerAndAliasFacade();
 
-        $this->bindCommunicatorAliases();
+        $this->bindCommunicationHandlerAliases();
 
         $this->registerGenericDrivers();    
 
         $this->aliasCommunicationPipes();
     }
 
+    /**
+     * Register the Manager and alias the Facade to it.
+     * 
+     * @return void
+     */
     protected function registerEmulatorManagerAndAliasFacade()
     {
         $this->app->singleton(EmulatorManager::class, function ($app) {
@@ -65,19 +69,30 @@ class EmulatorServiceProvider extends ServiceProvider
         $this->addProvides([EmulatorManager::class, Emulators::class]);
     }
 
-    protected function bindCommunicatorAliases()
+    /**
+     * Alias the communication handlers into the their segment,
+     * of the Emulator communication namespace.
+     * 
+     * @return void
+     */
+    protected function bindCommunicationHandlerAliases()
     {
         collect($this->app->config->get('emulator.communication.aliases'))
             ->each(function ($abstract, $alias) {
                 $this->app->alias(
                     $abstract, 
-                    $prefixedAlias = "Emulator.Communication.Communicators.{$alias}"
+                    $prefixedAlias = "Emulator.Communication.Handlers.{$alias}"
                 );
 
                 $this->addProvides($prefixedAlias);
             }); 
     }
 
+    /**
+     * Register the "generic" communication drivers with the Manager.
+     * 
+     * @return void
+     */
     protected function registerGenericDrivers()
     {
         $manager = $this->app->make(EmulatorManager::class);
@@ -90,6 +105,11 @@ class EmulatorServiceProvider extends ServiceProvider
             });
     }
 
+    /**
+     * Alias the communication pipes into their segment of the emulator communication namespace.
+     * 
+     * @return void
+     */
     protected function aliasCommunicationPipes()
     {
         foreach ($this->app->config->get('emulator.communication.pipes') as $pipe) {
@@ -102,6 +122,11 @@ class EmulatorServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Add a service provided by this Service Provider.
+     * 
+     * @param dynamic $services
+     */
     public function addProvides(...$services)
     {
         foreach (Arr::collapse($services) as $service) {

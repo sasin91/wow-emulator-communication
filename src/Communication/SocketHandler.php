@@ -2,12 +2,10 @@
 
 namespace Sasin91\WoWEmulatorCommunication\Communication;
 
-use Illuminate\Support\Arr;
-use Sasin91\WoWEmulatorCommunication\Communication\CommunicationHandler;
 use Sasin91\WoWEmulatorCommunication\Communication\Concerns\ParsesResponse;
 use Socket\Raw\Factory;
 
-class SocketCommunicator implements CommunicationHandler
+class SocketHandler implements CommunicationHandler
 {
     use ParsesResponse;
 
@@ -22,18 +20,18 @@ class SocketCommunicator implements CommunicationHandler
     }
 
     /**
-     * Configure the Communicator.
+     * Configure the Handler.
      *
      * @param  string $client 
      * @param  array  $options
      * @return $this
      */
-    public function configure($name, $options)
+    public function configure($name, array $options)
     {
         $this->socket = $this->socket->createClient($options['location']);
 
-        $this->socket->write($config['credentials']['login'].PHP_EOL)
-        $this->socket->write($config['credentials']['password'].PHP_EOL);
+        $this->socket->write($options['credentials']['login'].PHP_EOL);
+        $this->socket->write($options['credentials']['password'].PHP_EOL);
     }
 
     /**

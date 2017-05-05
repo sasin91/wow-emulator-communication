@@ -6,7 +6,7 @@ use Artisaninweb\SoapWrapper\Client;
 use Artisaninweb\SoapWrapper\SoapWrapper;
 use Sasin91\WoWEmulatorCommunication\EmulatorCommand;
 
-class SoapCommunicator implements CommunicationHandler
+class SoapHandler implements CommunicationHandler
 {
     use Concerns\ParsesResponse;
 
@@ -35,7 +35,7 @@ class SoapCommunicator implements CommunicationHandler
     }
 
     /**
-     * Configure the Communicator.
+     * Configure the Handler.
      *
      * @param  string $client 
      * @param  array  $options
