@@ -3,143 +3,59 @@
 namespace Sasin91\WoWEmulatorCommunication\Drivers;
 
 use Illuminate\Support\Arr;
-use Sasin91\WoWEmulatorCommunication\Communication\CommunicationHandler;
-use Sasin91\WoWEmulatorCommunication\Communication\CommunicationPipeline;
-use Sasin91\WoWEmulatorCommunication\Communication\SoapCommunicator;
+use Sasin91\WoWEmulatorCommunication\Communication\SoapHandler;
 use Sasin91\WoWEmulatorCommunication\Drivers\Concerns\DispatchesDynamicCommands;
-use Sasin91\WoWEmulatorCommunication\EmulatorCommand;
+use Sasin91\WoWEmulatorCommunication\Drivers\Concerns\ExecutesCommands;
+use Sasin91\WoWEmulatorCommunication\Drivers\Concerns\HasConfigurations;
+use Sasin91\WoWEmulatorCommunication\Drivers\Concerns\ResolvesCommunicationHandler;
+use Sasin91\WoWEmulatorCommunication\Drivers\Concerns\UsesContainer;
 
 /**
 * Emulator Communication Driver driver.
 *
 * Fire calls through a pipeline to the communication handler.
 */
-class EmulatorCommunicationDriver
+class EmulatorCommunicationDriver implements EmulatorCommunicationContract
 {
-	use DispatchesDynamicCommands;
-	
-	/**
-	 * The Remote API Communication handle.
-	 *
-	 * @var CommunicationHandler
-	 */
-	protected $communicationHandler;
+	use HasConfigurations, DispatchesDynamicCommands, ExecutesCommands;
 
-	/**
-	 * Array of Configurations
-	 * 
-	 * @var array
-	 */
-	protected $config;
-
-	/**
+    /**
 	 * Name of the driver.
 	 * @var string
 	 */
 	protected $name;
 
+	/**
+	 * Emulator Communication Driver Constructor
+	 * 
+	 * @param string $name   [Name of the Emulator driver]
+	 * @param array  $config 
+	 */
 	public function __construct($name, array $config)
 	{
 		$this->name = $name;
 		$this->config = $config;
 
-		$this->setup();
+		$this->bootTraits();
 	}
 
-	protected function setup()
-	{
-		$this->communicationHandler = $this->resolveCommunicationHandler();
+    /**
+     * Boot the traits.
+     *
+     * shamelessly copied from \Illuminate\Database\Eloquent\Model@bootTraits.
+     * @credits <original author>
+     *
+     * @return void
+     */
+    protected function bootTraits()
+    {
+        $class = static::class;
 
-		$name = "Emulator.Communication.Handler.{$this->name}";
-		if ($this->communicationHandler instanceof SoapCommunicator) {
-			$this->configureSoap($name);
-		} else {
-			$this->configureSocket($name);
-		}
-	}
-
-	protected function resolveCommunicationHandler()
-	{
-		if (app()->bound($this->config['handler']) || class_exists($this->config['handler'])) {
-			return app()->make($this->config['handler']);
-		}
-
-		$handler = 'Emulator.Communication.Communicators.'.$this->config['handler'];
-		return app($handler);
-	}
-
-	protected function configureSoap($name)
-	{
-		$options = array_merge(
-			Arr::get($this->config, 'credentials', []),
-			config("emulator.servers.{$this->name}.soap", [])
-		);
-
-		$this->communicationHandler->configure($name, $options);
-	}
-
-	protected function configureSocket($name)
-	{
-		$options = array_merge(
-			Arr::get($this->config, 'credentials', []),
-			config("emulator.servers.{$this->name}.ra", [])
-		);
-
-		$this->communicationHandler->configure($name, $options);
-	}
-
-	/**
-	 * Alias for fire.
-	 * 
-	 * @param   EmulatorCommand|string  $command
-     * @param   mixed                   $parameters
-	 * @return  mixed 	                Response from remote API.
-	 */
-	public function command($command, $parameters = null)
-	{
-		return $this->fire($command, $parameters);
-	}
-
-	/**
-	 * Dispatch a command
-	 * 
-	 * @param   EmulatorCommand|string  $command
-     * @param   mixed                   $parameters
-	 * @return  mixed 	                Response from remote API.
-	 */
-	public function fire($command, $parameters = null)
-	{
-		return (new CommunicationPipeline)
-		    ->send($this->preparedCommand($command, $parameters))
-		    ->through(Arr::get($this->config, 'pipes', []))
-		    ->then($this->executeCommand());
-	}
-	
-	/**
-	 * Prepare a EmulatorCommand.
-	 * 
-	 * @param  string|EmulatorCommand $command
-	 * @param  mixed $parameters
-	 * @return EmulatorCommand
-	 */
-	protected function preparedCommand($command, $parameters)
-	{
-		$parameters = Arr::wrap($parameters);
-
-		return $command instanceof EmulatorCommand 
-			? $command->addParameters($parameters) 
-			: new EmulatorCommand($command, $parameters);
-	}
-
-	/**
-	 * Execute the EmulatorCommand.
-	 * 
-	 * @return \Closure
-	 */
-	protected function executeCommand()
-	{
-		return function ($command) {
-			return $this->communicationHandler->handle($command);
-		};
-	}
+        foreach (class_uses_recursive($class) as $trait) {
+            if (method_exists($class, $method = 'boot'.class_basename($trait))) {
+                // call_user_func([$this, $method]);
+                $this->$method();
+            }
+        }
+    }
 }
