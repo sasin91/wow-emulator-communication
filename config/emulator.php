@@ -1,9 +1,7 @@
 <?php 
 use Sasin91\WoWEmulatorCommunication\Communication\Pipes\VerifyCommandPresence;
-use Sasin91\WoWEmulatorCommunication\Communication\SoapCommunicator;
-use Sasin91\WoWEmulatorCommunication\Communication\SocketCommunicator;
-use Sasin91\WoWEmulatorCommunication\Testing\AssertCommandPassed;
-use Sasin91\WoWEmulatorCommunication\Testing\FakeSoapClient;
+use Sasin91\WoWEmulatorCommunication\Communication\SoapHandler;
+use Sasin91\WoWEmulatorCommunication\Communication\SocketHandler;
 
 return [
 	
@@ -32,7 +30,7 @@ return [
     | The default should be present in the array of drivers below.
     |
     */
-	'default'	=>	'TrinityCore',
+	'default'	=>	env('EMULATOR_DEFAULT', 'TrinityCore'),
 
 	/*
     |--------------------------------------------------------------------------
@@ -51,7 +49,7 @@ return [
     | You may also configure which pipes the driver should pass the command through,
     | before passing it to the communication handler.
     |
-    | Additionally it is also possible to register your own pipes
+    | Additionally it is also possible to register your own pipes.
     */
 	'drivers'	=>	[
 		'multiple'	=>	['TrinityCore', 'CMangos'],
@@ -85,8 +83,8 @@ return [
 	        'pipes'	=>	[
 	        	'VerifyCommandPresence'	=>	[
 	        		'database'	=>	[
-	        			'connection'	=>	env('TC_WORLD_CONNECTION', 'world'),
-	        			'table'			=>	env('TC_WORLD_COMMANDS_TABLE', 'commands')
+	        			'connection'	=>	env('CMANGOS_WORLD_CONNECTION', 'world'),
+	        			'table'			=>	env('CMANGOS_WORLD_COMMANDS_TABLE', 'commands')
 	        		]
 	        	]
 	        ]
@@ -111,20 +109,7 @@ return [
 
 		/*
 		|--------------------------------------------------------------------------
-	    | Communicators
-	    |--------------------------------------------------------------------------
-		|	
-	    | Array of communicators,
-	    | these provide the "gateway" for passing the command to the remote API.
-		*/
-		'communicators'	=>	[
-			SoapCommunicator::class,
-			SocketCommunicator::class,
-		],
-
-		/*
-		|--------------------------------------------------------------------------
-	    | Communicator aliases
+	    | Handler aliases
 	    |--------------------------------------------------------------------------
 		|	
 	    | The communication aliases,
@@ -133,15 +118,15 @@ return [
 	    |
 	    | These aliases will get prefixed, so they don't conflict with 
 	    | existing system aliases.
-	    | eg. Emulator.Communication.Communicators.soap
+	    | eg. Emulator.Communication.Handlers.soap
 	    |
 	    | Note, when setting a driver handler, 
 	    | you should not write the full prefixed alias,
 	    | but rather just the alias itself.
 		*/		
 		'aliases'	=>	[
-			'soap'		=>	SoapCommunicator::class,
-			'socket'	=>	SocketCommunicator::class
+			'soap'		=>	SoapHandler::class,
+			'socket'	=>	SocketHandler::class
 		]
 	],
 
@@ -155,14 +140,26 @@ return [
 	'servers'	=>	[
 		'TrinityCore'   =>  [
 	        'soap'    =>  [
-	            'location'  =>  env('SOAP_LOCATION', 'http://127.0.0.1:7878'),
-	            'uri'       =>  env('SOAP_URI', 'urn:TC'),
-	            'style'     =>  env('SOAP_STYLE', SOAP_RPC),
+	            'location'  =>  env('TC_SOAP_LOCATION', 'http://127.0.0.1:7878'),
+	            'uri'       =>  env('TC_SOAP_URI', 'urn:TC'),
+	            'style'     =>  env('TC_SOAP_STYLE', SOAP_RPC),
 	        ],
 
 	        'socket'	=>  [
-	              'location'  =>  env('RA_LOCATION', 'tcp://127.0.0.1:3443')
+	              'location'  =>  env('TC_RA_LOCATION', 'tcp://127.0.0.1:3443')
 	        ]
-	    ]
+	    ],
+
+        'CMangos'   =>  [
+            'soap'    =>  [
+                'location'  =>  env('CMANGOS_SOAP_LOCATION', 'http://127.0.0.1:7878'),
+                'uri'       =>  env('CMANGOS_SOAP_URI', 'urn:MaNGOS'),
+                'style'     =>  env('CMANGOS_SOAP_STYLE', SOAP_RPC),
+            ],
+
+            'socket'	=>  [
+                'location'  =>  env('CMANGOS_RA_LOCATION', 'tcp://127.0.0.1:3443')
+            ]
+        ]
 	]
 ];
