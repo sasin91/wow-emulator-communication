@@ -148,6 +148,37 @@ As an extra convenience, `dispatchTo($driver, $command)` is also available on th
 
 $command can be an instance of `\Sasin91\WoWEmulatorCommunication\EmulatorCommand` or a string.
 
+#### Facade tip
+A little **nugget** with the Laravel Facades, is the ability to write and register your own.
+
+This enables you to make driver specific Facades, for instance `App\Facades\TrinityCore`.
+```php
+class TrinityCore extends \Illuminate\Support\Facades\Facade 
+{
+    /**
+     * Get the root object behind the facade.
+     *
+     * @return mixed
+     */
+    public static function getFacadeRoot()
+    {
+        return parent::getFacadeRoot()->driver('TrinityCore');
+    }
+
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     *
+     * @throws \RuntimeException
+     */
+    protected static function getFacadeAccessor()
+    {
+        return 'Sasin91\WoWEmulatorCommunication\EmulatorManager';
+    }
+}
+```
+
 <a name="driver-manager" />
 
 ### Driver Manager
