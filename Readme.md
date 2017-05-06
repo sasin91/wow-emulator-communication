@@ -3,7 +3,6 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
 Remote API Communication package for WoW private servers
-Teamwork is the fastest and easiest method to add a User / Team association with Invites to your **Laravel 5** project.
 
 ## Contents
 
