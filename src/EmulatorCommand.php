@@ -13,63 +13,63 @@ use Sasin91\WoWEmulatorCommunication\EmulatorManager;
 */
 class EmulatorCommand implements EmulatorCommandContract
 {
-	use ConcatenatesIntoCommandString, Dispatchable, UsesContainer;
+    use ConcatenatesIntoCommandString, Dispatchable, UsesContainer;
 
-	/**
-	 * The command string.
-	 * 
-	 * @var string
-	 */
-	protected $command;
+    /**
+     * The command string.
+     *
+     * @var string
+     */
+    protected $command;
 
-	/**
-	 * EmulatorCommand Constructor
-	 * 
-	 * @param string $command    The command to fire through
-	 * @param array  $parameters 
-	 * @param string $delimiter  
-	 */
-	public function __construct($command, $parameters = [], $delimiter = ' ')
-	{
-		$this->command = $command;
-		$this->parameters = Arr::wrap($parameters);
-		$this->delimiter = $delimiter;
-	}
+    /**
+     * EmulatorCommand Constructor
+     *
+     * @param string $command    The command to fire through
+     * @param array  $parameters
+     * @param string $delimiter
+     */
+    public function __construct($command, $parameters = [], $delimiter = ' ')
+    {
+        $this->command = $command;
+        $this->parameters = Arr::wrap($parameters);
+        $this->delimiter = $delimiter;
+    }
 
-	/**
-	 * Dispatch a command to a specific driver.
-	 * 
-	 * @param  string $driver
-	 * @param  string $command 
-	 * @param  array  $parameters
-	 * @return mixed
-	 */
-	public static function dispatchTo($driver, $command, $parameters = [])
-	{
-		return (new static($command, Arr::wrap($parameters)))->fire($driver);
-	}
+    /**
+     * Dispatch a command to a specific driver.
+     *
+     * @param  string $driver
+     * @param  string $command
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public static function dispatchTo($driver, $command, $parameters = [])
+    {
+        return (new static($command, Arr::wrap($parameters)))->fire($driver);
+    }
 
-	/**
-	 * Get the command string.
-	 * 
-	 * @return string
-	 */
-	public function command()
-	{
-		return $this->command;
-	}
+    /**
+     * Get the command string.
+     *
+     * @return string
+     */
+    public function command()
+    {
+        return $this->command;
+    }
 
-	/**
-	 * Fire the command
-	 *
-	 * @param string|null $driver emulator driver name
-	 * @return mixed  Response from remote API.
-	 */
-	public function fire($driver = null)
-	{
-		return $this->container()
-		->make(EmulatorManager::class)
-		->driver($driver)
-		->command($this);
-	}
+    /**
+     * Fire the command
+     *
+     * @param string|null $driver emulator driver name
+     * @return mixed  Response from remote API.
+     */
+    public function fire($driver = null)
+    {
+        return $this->container()
+        ->make(EmulatorManager::class)
+        ->driver($driver)
+        ->command($this);
+    }
 }

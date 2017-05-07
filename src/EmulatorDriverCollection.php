@@ -12,19 +12,19 @@ use Illuminate\Support\Collection;
  */
 class EmulatorDriverCollection extends Collection
 {
-	/**
-	 * Dynamically map and proxy calls to the Driver(s).
-	 * 
-	 * @param  string $method
-	 * @param  array  $parameters
-	 * @return $this
-	 */
-	public function __call($method, $parameters = [])
-	{
-		if (static::hasMacro($method)) {
-			return parent::__call($method, $parameters);
-		}
+    /**
+     * Dynamically map and proxy calls to the Driver(s).
+     *
+     * @param  string $method
+     * @param  array  $parameters
+     * @return $this
+     */
+    public function __call($method, $parameters = [])
+    {
+        if (static::hasMacro($method)) {
+            return parent::__call($method, $parameters);
+        }
 
-		return $this->map->$method(...$parameters);
-	}
+        return $this->map->$method(...$parameters);
+    }
 }

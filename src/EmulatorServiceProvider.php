@@ -16,7 +16,7 @@ class EmulatorServiceProvider extends ServiceProvider
 {
     /**
      * Services provided by the service provider.
-     * 
+     *
      * @var array
      */
     protected $provides = [];
@@ -40,7 +40,7 @@ class EmulatorServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (! $this->app->config->has('emulator') ) {
+        if (! $this->app->config->has('emulator')) {
             $this->app->config->set('emulator', require __DIR__.'/../config/emulator.php');
         }
 
@@ -48,14 +48,14 @@ class EmulatorServiceProvider extends ServiceProvider
 
         $this->bindCommunicationHandlerAliases();
 
-        $this->registerGenericDrivers();    
+        $this->registerGenericDrivers();
 
         $this->aliasCommunicationPipes();
     }
 
     /**
      * Register the Manager and alias the Facade to it.
-     * 
+     *
      * @return void
      */
     protected function registerEmulatorManagerAndAliasFacade()
@@ -72,7 +72,7 @@ class EmulatorServiceProvider extends ServiceProvider
     /**
      * Alias the communication handlers into the their segment,
      * of the Emulator communication namespace.
-     * 
+     *
      * @return void
      */
     protected function bindCommunicationHandlerAliases()
@@ -80,41 +80,41 @@ class EmulatorServiceProvider extends ServiceProvider
         collect($this->app->config->get('emulator.communication.aliases'))
             ->each(function ($abstract, $alias) {
                 $this->app->alias(
-                    $abstract, 
+                    $abstract,
                     $prefixedAlias = "Emulator.Communication.Handlers.{$alias}"
                 );
 
                 $this->addProvides($prefixedAlias);
-            }); 
+            });
     }
 
     /**
      * Register the "generic" communication drivers with the Manager.
-     * 
+     *
      * @return void
      */
     protected function registerGenericDrivers()
     {
         $manager = $this->app->make(EmulatorManager::class);
         collect($this->app->config->get('emulator.drivers'))->keys()
-            ->reject(function ($driver) use($manager) {
+            ->reject(function ($driver) use ($manager) {
                 return $manager->hasDriver($driver);
             })
-            ->each(function ($driver) use($manager) {
+            ->each(function ($driver) use ($manager) {
                 return $manager->extend($driver, $manager->genericDriverCallback($driver));
             });
     }
 
     /**
      * Alias the communication pipes into their segment of the emulator communication namespace.
-     * 
+     *
      * @return void
      */
     protected function aliasCommunicationPipes()
     {
         foreach ($this->app->config->get('emulator.communication.pipes') as $pipe) {
             $this->app->alias(
-                $pipe, 
+                $pipe,
                 $alias = 'Emulators.Communication.Pipes.'.class_basename($pipe)
             );
             
@@ -124,7 +124,7 @@ class EmulatorServiceProvider extends ServiceProvider
 
     /**
      * Add a service provided by this Service Provider.
-     * 
+     *
      * @param dynamic $services
      */
     public function addProvides(...$services)

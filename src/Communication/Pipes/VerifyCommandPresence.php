@@ -11,25 +11,25 @@ use Illuminate\Support\Facades\DB;
 */
 class VerifyCommandPresence
 {
-	/**
-	 * Pipe configuration
-	 * 
-	 * @var array
-	 */
-	protected $config = [];
+    /**
+     * Pipe configuration
+     *
+     * @var array
+     */
+    protected $config = [];
 
-	public function __construct($config)
-	{
-		$this->config = Arr::wrap($config);
-	}
+    public function __construct($config)
+    {
+        $this->config = Arr::wrap($config);
+    }
 
-	public function handle($command, \Closure $next)
-	{
-		DB::connection($this->config['database']['connection'])
-		  ->table($this->config['database']['table'])
-		  ->where('name', $command)
-		  ->firstOrFail();
+    public function handle($command, \Closure $next)
+    {
+        DB::connection($this->config['database']['connection'])
+          ->table($this->config['database']['table'])
+          ->where('name', $command)
+          ->firstOrFail();
 
-		return $next($command);
-	}
+        return $next($command);
+    }
 }

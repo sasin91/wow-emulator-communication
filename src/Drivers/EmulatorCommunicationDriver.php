@@ -17,27 +17,27 @@ use Sasin91\WoWEmulatorCommunication\Drivers\Concerns\UsesContainer;
 */
 class EmulatorCommunicationDriver implements EmulatorCommunicationContract
 {
-	use HasConfigurations, DispatchesDynamicCommands, ExecutesCommands;
+    use HasConfigurations, DispatchesDynamicCommands, ExecutesCommands;
 
     /**
-	 * Name of the driver.
-	 * @var string
-	 */
-	protected $name;
+     * Name of the driver.
+     * @var string
+     */
+    protected $name;
 
-	/**
-	 * Emulator Communication Driver Constructor
-	 * 
-	 * @param string $name   [Name of the Emulator driver]
-	 * @param array  $config 
-	 */
-	public function __construct($name, array $config)
-	{
-		$this->name = $name;
-		$this->config = $config;
+    /**
+     * Emulator Communication Driver Constructor
+     *
+     * @param string $name   [Name of the Emulator driver]
+     * @param array  $config
+     */
+    public function __construct($name, array $config)
+    {
+        $this->name = $name;
+        $this->config = $config;
 
-		$this->bootTraits();
-	}
+        $this->bootTraits();
+    }
 
     /**
      * Boot the traits.

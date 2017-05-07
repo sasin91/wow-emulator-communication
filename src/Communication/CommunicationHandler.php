@@ -15,7 +15,7 @@ interface CommunicationHandler
     /**
      * Configure the Communication handler.
      *
-     * @param  string $client 
+     * @param  string $client
      * @param  array  $options
      * @return $this
      */

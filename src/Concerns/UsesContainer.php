@@ -20,11 +20,11 @@ trait UsesContainer
     protected $container;
 
     /**
-	 * Use the given Container.
-	 *
-	 * @param  Container $container
-	 * @return $this
-	 */
+     * Use the given Container.
+     *
+     * @param  Container $container
+     * @return $this
+     */
     public function useContainer($container)
     {
         $this->container = $container;
@@ -33,11 +33,11 @@ trait UsesContainer
     }
 
     /**
-	 * Get the Container instance.
-	 * defaults to Laravel container through app() helper.
-	 *
-	 * @return \Illuminate\Contracts\Container\Container
-	 */
+     * Get the Container instance.
+     * defaults to Laravel container through app() helper.
+     *
+     * @return \Illuminate\Contracts\Container\Container
+     */
     protected function container()
     {
         return $this->container ? $this->container : $this->container = app();

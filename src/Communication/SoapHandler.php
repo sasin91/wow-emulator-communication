@@ -19,7 +19,7 @@ class SoapHandler implements CommunicationHandler
 
     /**
      * Name of the Soap client.
-     * 
+     *
      * @var string
      */
     protected $client;
@@ -37,7 +37,7 @@ class SoapHandler implements CommunicationHandler
     /**
      * Configure the Handler.
      *
-     * @param  string $client 
+     * @param  string $client
      * @param  array  $options
      * @return $this
      */
@@ -46,10 +46,10 @@ class SoapHandler implements CommunicationHandler
         $this->client = $client;
 
         if (! $this->soap->has($this->client)) {
-            $this->soap->add($this->client, function ($service) use($options) {
+            $this->soap->add($this->client, function ($service) use ($options) {
                 $service
                     ->cache(WSDL_CACHE_MEMORY)
-                    ->options($options);    
+                    ->options($options);
             });
         }
 
@@ -81,7 +81,7 @@ class SoapHandler implements CommunicationHandler
 
     /**
      * Callback for executing a Soap command with a SoapParam.
-     * 
+     *
      * @param  EmulatorCommand $command
      * @return \Closure
      */
@@ -91,5 +91,4 @@ class SoapHandler implements CommunicationHandler
             return $client->executeCommand(new \SoapParam($command, 'command'));
         };
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace Sasin91\WoWEmulatorCommunication\Drivers\Concerns;
 
-
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 

@@ -4,7 +4,6 @@ namespace Sasin91\WoWEmulatorCommunication\Drivers;
 
 use Sasin91\WoWEmulatorCommunication\EmulatorCommand;
 
-
 /**
  * Emulator Communication Driver driver.
  *

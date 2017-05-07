@@ -2,16 +2,15 @@
 
 namespace Sasin91\WoWEmulatorCommunication\Drivers\Concerns;
 
-
 use Illuminate\Support\Arr;
 
 trait HasConfigurations
 {
     /**
-	 * Array of Configurations
-	 *
-	 * @var array
-	 */
+     * Array of Configurations
+     *
+     * @var array
+     */
     protected $config;
 
     /**

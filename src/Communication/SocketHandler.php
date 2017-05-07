@@ -22,7 +22,7 @@ class SocketHandler implements CommunicationHandler
     /**
      * Configure the Handler.
      *
-     * @param  string $client 
+     * @param  string $client
      * @param  array  $options
      * @return $this
      */

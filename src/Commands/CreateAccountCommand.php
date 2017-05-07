@@ -11,42 +11,42 @@ use Sasin91\WoWEmulatorCommunication\NamedEmulatorCommandContract;
 */
 class CreateAccountCommand implements NamedEmulatorCommandContract
 {
-	use NamedCommand, Validatable;
+    use NamedCommand, Validatable;
 
-	/**
-	 * Construct a named command for registering an account.
-	 * 
-	 * @param string $name
-	 * @param string $password
-	 */
-	public function __construct($name, $password)
-	{
-		$this->parameters = ['name' => $name, 'password' => $password];
+    /**
+     * Construct a named command for registering an account.
+     *
+     * @param string $name
+     * @param string $password
+     */
+    public function __construct($name, $password)
+    {
+        $this->parameters = ['name' => $name, 'password' => $password];
 
-		$this->rules([
-			'name'		=>	['required', 'string'],
-			'password'	=>	['required', 'string']
-		]);
-	}
+        $this->rules([
+            'name'        =>    ['required', 'string'],
+            'password'    =>    ['required', 'string']
+        ]);
+    }
 
-	/**
-	 * Get the command string.
-	 * 
-	 * @return string
-	 */
-	public function command()
-	{
-		return 'account create';
-	}
+    /**
+     * Get the command string.
+     *
+     * @return string
+     */
+    public function command()
+    {
+        return 'account create';
+    }
 
-	/**
-	 * Get the name of the underlying driver
-	 * or null for default.
-	 * 
-	 * @return string|null
-	 */
-	public function driver()
-	{
-		return null;
-	}
+    /**
+     * Get the name of the underlying driver
+     * or null for default.
+     *
+     * @return string|null
+     */
+    public function driver()
+    {
+        return null;
+    }
 }

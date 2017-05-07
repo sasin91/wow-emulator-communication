@@ -31,7 +31,7 @@ class Emulators extends Facade
      */
     /**
      * Alias for driver.
-     * 
+     *
      * @param  string $driver
      * @return Sasin91\WoWEmulatorCommunication\Drivers\EmulatorCommunicationDriver
      */
@@ -42,8 +42,8 @@ class Emulators extends Facade
 
     /**
      * Dispatch a command to a emulator driver.
-     * 
-     * @param  string                   $emulator 
+     *
+     * @param  string                   $emulator
      * @param  EmulatorCommand|string   $command
      * @return mixed
      */
@@ -65,7 +65,7 @@ class Emulators extends Facade
     {
         $manager = static::getFacadeRoot();
 
-        if (config('emulator.proxy-driver-commands') 
+        if (config('emulator.proxy-driver-commands')
             && $manager->hasDriver($driver = Str::lower($method))
         ) {
             return $manager->driver($driver)->command(new EmulatorCommand(...$args));

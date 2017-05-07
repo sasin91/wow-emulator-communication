@@ -11,7 +11,7 @@ use Sasin91\WoWEmulatorCommunication\Drivers\EmulatorCommunicationDriver;
 */
 class EmulatorManager extends Manager
 {
-        /**
+    /**
      * Get a driver instance.
      *
      * @param  string  $driver
@@ -19,7 +19,7 @@ class EmulatorManager extends Manager
      */
     public function driver($driver = null)
     {
-        if (Str::startsWith($driver,'multiple')) {
+        if (Str::startsWith($driver, 'multiple')) {
             return $this->createMultipleDriver($driver);
         }
 
@@ -33,12 +33,12 @@ class EmulatorManager extends Manager
      */
     public function getDefaultDriver()
     {
-    	return $this->app->config->get('emulator.default');
+        return $this->app->config->get('emulator.default');
     }
 
     /**
      * Create multiple drivers and return a collection which proxy maps dynamic calls to them.
-     * 
+     *
      * @param  string $driver
      * @return \Sasin91\WoWEmulatorCommunication\EmulatorDriverCollection
      */
@@ -55,13 +55,13 @@ class EmulatorManager extends Manager
 
     /**
      * Checks whether the Manager has a given driver.
-     * 
+     *
      * @param  string  $driver
-     * @return boolean       
+     * @return boolean
      */
     public function hasDriver($driver)
     {
-        return isset($this->customCreators[$driver]) 
+        return isset($this->customCreators[$driver])
         || method_exists($this, 'create'.Str::studly($driver).'Driver');
     }
 
@@ -81,13 +81,13 @@ class EmulatorManager extends Manager
 
     /**
      * Get a callback for wrapping a dynamic driver
-     * 
+     *
      * @param  string $driver
      * @return \Closure
      */
     public function genericDriverCallback($driver)
     {
-        return function () use($driver) {
+        return function () use ($driver) {
             return $this->useGenericDriverFor($driver);
         };
     }
