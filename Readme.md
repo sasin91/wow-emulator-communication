@@ -105,9 +105,10 @@ For custom drivers, you should register pipes like any other driver, in the 'dri
 
 
 <a name="named-commands">
+
 ### Named commands
 
-Now, writing every command string manually can get a little bit tedious and error phrone.
+Writing every command string manually can get a little bit tedious and error phrone.
 Enter named commands!
 
 These commands, unlike the conventional commands will contain the command string themselves 
