@@ -4,6 +4,7 @@ namespace Sasin91\WoWEmulatorCommunication\Drivers\Concerns;
 
 use Sasin91\WoWEmulatorCommunication\Communication\CommunicationHandler;
 use Sasin91\WoWEmulatorCommunication\Communication\SoapHandler;
+use Sasin91\WoWEmulatorCommunication\Concerns\UsesContainer;
 
 /**
  * Enables the Driver to resolve the communication handler, that should receive the Command after the Pipeline.
