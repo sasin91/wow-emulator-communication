@@ -5,6 +5,7 @@ namespace Sasin91\WoWEmulatorCommunication\Drivers\Concerns;
 use Illuminate\Support\Arr;
 use Sasin91\WoWEmulatorCommunication\Communication\CommunicationPipeline;
 use Sasin91\WoWEmulatorCommunication\EmulatorCommand;
+use Sasin91\WoWEmulatorCommunication\EmulatorCommandContract;
 
 /**
  * Enables a CommunicationDriver to execute Commands.
@@ -31,14 +32,20 @@ trait ExecutesCommands
     /**
      * Dispatch a command
      *
-     * @param   EmulatorCommand|string  $command
-* @param   mixed                   $parameters
-     * @return  mixed 	                Response from remote API.
+     * @param   EmulatorCommandContract|string  $command
+     * @param   mixed                           $parameters
+     * @return  mixed 	                        Response from remote API.
      */
     public function fire($command, $parameters = null)
     {
+        $command = tap($this->prepareCommand($command, $parameters), function ($command) {
+            if (method_exists($command, 'validate')) {
+                $command->validate();
+            }
+        });
+
         return (new CommunicationPipeline)
-            ->send($this->preparedCommand($command, $parameters))
+            ->send($command)
             ->through(Arr::get($this->config, 'pipes', []))
             ->then($this->executeCommand());
     }
@@ -50,11 +57,11 @@ trait ExecutesCommands
      * @param  mixed $parameters
      * @return EmulatorCommand
      */
-    protected function preparedCommand($command, $parameters)
+    protected function prepareCommand($command, $parameters)
     {
         $parameters = Arr::wrap($parameters);
 
-        return $command instanceof EmulatorCommand
+        return $command instanceof EmulatorCommandContract
             ? $command->addParameters($parameters)
             : new EmulatorCommand($command, $parameters);
     }

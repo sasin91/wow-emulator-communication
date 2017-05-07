@@ -11,6 +11,7 @@ Remote API Communication package for WoW private servers
     - [Custom drivers](#custom-drivers)
     	- [Driver traits](#driver-concerns)
     - [Communication pipes](#communication-pipes)
+    - [Named Commands](#named-commands)
 - [Usage](#usage)
     - [Facade](#facade)
     - [Manager](#driver-manager)
@@ -103,16 +104,31 @@ if you need inspiration, take a look at the existing Pipes in the `Sasin91\WoWEm
 For custom drivers, you should register pipes like any other driver, in the 'drivers' array in the `emulator.php` config file.
 
 
-As with any package, it's a good idea to refresh composer autoloader.
-```bash
-composer dump-autoload
-```
+<a name="named-commands">
+### Named commands
+
+Now, writing every command string manually can get a little bit tedious and error phrone.
+Enter named commands!
+
+These commands, unlike the conventional commands will contain the command string themselves 
+and only require the input parameters to be entered.
+In addition to the communication pipes, it is possible to leverage the Laravel Validator,
+by using `Sasin91\WoWEmulatorCommunication\Commands\Concerns\Validatable` and setting your rules([...]).
+
+As with the drivers, it is also possible to write your own named commands,
+a named command should implement the 
+`Sasin91\WoWEmulatorCommunication\NamedEmulatorCommandContract` interface.
 
 <a name="middleware">
 
 ### Http Middleware
 
 # TODO
+
+As with any package, it's a good idea to refresh composer autoloader.
+```bash
+composer dump-autoload
+```
 
 **And you are ready to go.**
 

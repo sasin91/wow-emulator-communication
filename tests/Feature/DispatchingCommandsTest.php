@@ -1,77 +1,15 @@
 <?php
 
 namespace Sasin91\WoWEmulatorCommunication\Tests\Feature;
+
 use Orchestra\Testbench\TestCase;
+use Sasin91\WoWEmulatorCommunication\Commands\CreateAccountCommand;
 use Sasin91\WoWEmulatorCommunication\EmulatorCommand;
-use Sasin91\WoWEmulatorCommunication\EmulatorManager;
-use Sasin91\WoWEmulatorCommunication\Testing\AssertCommandPassed;
-use Sasin91\WoWEmulatorCommunication\Testing\FakeSoapClient;
-use Sasin91\WoWEmulatorCommunication\Testing\FakeSoapServer;
+use Sasin91\WoWEmulatorCommunication\Tests\Concerns\CommandTestTrait;
 
 class DispatchingCommandsTest extends TestCase
 {
-	/**
-	 * Emulator Manager
-	 * 
-	 * @var EmulatorManager
-	 */
-	protected $manager;
-
-	protected function getPackageProviders($app)
-	{
-	    return ['Sasin91\WoWEmulatorCommunication\EmulatorServiceProvider'];
-	}
-
-	protected function getPackageAliases($app)
-	{
-	    return [
-	        'Emulators' => 'Sasin91\WoWEmulatorCommunication\Facades\Emulators'
-	    ];
-	}
-
-	/**
-	 * Define environment setup.
-	 *
-	 * @param  \Illuminate\Foundation\Application  $app
-	 * @return void
-	 */
-	protected function getEnvironmentSetUp($app)
-	{
-		$config = $app['config'];
-
-	    // Setup default emulator to a test double
-	    $config->set('emulator.default', 'testing');
-	    $config->set('emulator.drivers.testing', [
-	    	'handler' => FakeSoapClient::class,
-	    	'pipes'	  => [AssertCommandPassed::class]
-	    ]);
-
-	    // Setup testing-multiple driver
-	    $config->set('emulator.drivers.multiple-testing', ['testing']);
-
-	    // Enable driver command proxying
-	    $config->set('emulator.proxy-driver-commands', true);
-	}
-
-    /**
-     * Setup the test environment.
-     *
-     * @return void
-     */
-    protected function setUp()
-	{
-		parent::setUp();
-
-		$this->manager = new EmulatorManager($this->app);
-
-		foreach (array_keys($this->app->config->get('emulator.drivers')) as $driver) {
-			$this->manager->extend(
-				$driver, $this->manager->genericDriverCallback($driver)
-			);
-		}
-
-		\Emulators::swap($this->manager);
-	}
+	use CommandTestTrait;
 
 	/**
 	 * @covers Sasin91\WoWEmulatorCommunication\EmulatorManager::driver()
@@ -132,5 +70,19 @@ class DispatchingCommandsTest extends TestCase
 			"hello world how is it spinning?",
 			\Emulators::Testing('hello world', 'how is it spinning?')
 		);
+	}
+
+	/**
+	 * @covers Sasin91\WoWEmulatorCommunication\NamedEmulatorCommandContract@fire
+	 * @covers Sasin91\WoWEmulatorCommunication\Commands\Concerns\Validatable@validate
+	 * 
+	 * @test
+	 */
+	public function it_can_dispatch_a_named_command_object()
+	{
+	    $this->assertEquals(
+	    	"account create john secret",
+	    	\Emulators::fire(new CreateAccountCommand('john', 'secret'))
+	    );
 	}
 }
