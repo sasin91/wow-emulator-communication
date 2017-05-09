@@ -1,3 +1,5 @@
 /vendor
 todo
 composer.lock
+.php_cs.cache
+Readme.html

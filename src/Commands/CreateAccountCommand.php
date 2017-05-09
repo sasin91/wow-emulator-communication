@@ -2,6 +2,7 @@
 
 namespace Sasin91\WoWEmulatorCommunication\Commands;
 
+use Sasin91\WoWEmulatorCommunication\Commands\Concerns\HasEvents;
 use Sasin91\WoWEmulatorCommunication\Commands\Concerns\NamedCommand;
 use Sasin91\WoWEmulatorCommunication\Commands\Concerns\Validatable;
 use Sasin91\WoWEmulatorCommunication\NamedEmulatorCommandContract;
@@ -11,7 +12,7 @@ use Sasin91\WoWEmulatorCommunication\NamedEmulatorCommandContract;
 */
 class CreateAccountCommand implements NamedEmulatorCommandContract
 {
-    use NamedCommand, Validatable;
+    use NamedCommand, Validatable, HasEvents;
 
     /**
      * Construct a named command for registering an account.

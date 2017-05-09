@@ -5,6 +5,11 @@ namespace Sasin91\WoWEmulatorCommunication;
 use Illuminate\Support\Arr;
 use Sasin91\WoWEmulatorCommunication\Commands\Concerns\ConcatenatesIntoCommandString;
 use Sasin91\WoWEmulatorCommunication\Commands\Concerns\Dispatchable;
+use Sasin91\WoWEmulatorCommunication\Commands\Concerns\HasEvents;
+use Sasin91\WoWEmulatorCommunication\Commands\Events\CommandCreated;
+use Sasin91\WoWEmulatorCommunication\Commands\Events\CommandCreating;
+use Sasin91\WoWEmulatorCommunication\Commands\Events\CommandFired;
+use Sasin91\WoWEmulatorCommunication\Commands\Events\CommandFiring;
 use Sasin91\WoWEmulatorCommunication\Concerns\UsesContainer;
 use Sasin91\WoWEmulatorCommunication\EmulatorManager;
 
@@ -13,7 +18,7 @@ use Sasin91\WoWEmulatorCommunication\EmulatorManager;
 */
 class EmulatorCommand implements EmulatorCommandContract
 {
-    use ConcatenatesIntoCommandString, Dispatchable, UsesContainer;
+    use ConcatenatesIntoCommandString, Dispatchable, UsesContainer, HasEvents;
 
     /**
      * The command string.
@@ -31,9 +36,13 @@ class EmulatorCommand implements EmulatorCommandContract
      */
     public function __construct($command, $parameters = [], $delimiter = ' ')
     {
+        $this->fireCommandEvent(new CommandCreating($this));
+
         $this->command = $command;
         $this->parameters = Arr::wrap($parameters);
         $this->delimiter = $delimiter;
+
+        $this->fireCommandEvent(new CommandCreated($this));
     }
 
     /**
@@ -67,9 +76,15 @@ class EmulatorCommand implements EmulatorCommandContract
      */
     public function fire($driver = null)
     {
-        return $this->container()
+        $this->fireCommandEvent(new CommandFiring($this));
+
+        $response = $this->container()
         ->make(EmulatorManager::class)
         ->driver($driver)
         ->command($this);
+
+        $this->fireCommandEvent(new CommandFired($this));
+
+        return $response;
     }
 }

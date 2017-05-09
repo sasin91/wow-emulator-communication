@@ -2,6 +2,8 @@
 
 namespace Sasin91\WoWEmulatorCommunication\Commands\Concerns;
 
+use Sasin91\WoWEmulatorCommunication\Commands\Events\CommandFired;
+use Sasin91\WoWEmulatorCommunication\Commands\Events\CommandFiring;
 use Sasin91\WoWEmulatorCommunication\Concerns\UsesContainer;
 use Sasin91\WoWEmulatorCommunication\EmulatorManager;
 
@@ -16,9 +18,15 @@ trait NamedCommand
      */
     public function fire()
     {
-        return $this->container()
+        $this->fireCommandEvent(new CommandFiring($this));
+
+        $response = $this->container()
         ->make(EmulatorManager::class)
         ->driver($this->driver())
         ->command($this);
+
+        $this->fireCommandEvent(new CommandFired($this));
+
+        return $response;
     }
 }
