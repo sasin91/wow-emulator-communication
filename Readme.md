@@ -211,10 +211,13 @@ There isn't really that much to say about this, if you prefer depedency injectio
 
 ## Events
 During the lifecycle of a Command, 
-the [CommandCreating, CommandCreated, CommandFiring, CommandFired] events are expected to be  fired.
+
+the [CommandCreating, CommandCreated, CommandFiring, CommandFired] events,
+are expected to be  fired.
 
 However the creating & created events are optional for custom commands,
 in the sense that they're expected to be manually fired.
+
 A typical place would be in the constructor for these events.
 
 Additionally, it is possible to disable the events complete,
