@@ -210,7 +210,17 @@ There isn't really that much to say about this, if you prefer depedency injectio
 <a name="events" />
 
 ## Events
-# TODO
+During the lifecycle of a Command, 
+the [CommandCreating, CommandCreated, CommandFiring, CommandFired] events are expected to be  fired.
+
+However the creating & created events are optional for custom commands,
+in the sense that they're expected to be manually fired.
+A typical place would be in the constructor for these events.
+
+Additionally, it is possible to disable the events complete,
+by calling `EmulatorCommand::unsetEventDispatcher()`.
+In the same sense, it is also possible to replace the dispatcher,
+by calling `EmulatorCommand::setEventDispatcher($dispatcher)`.
 
 <a name="license" />
 
