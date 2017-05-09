@@ -8,14 +8,14 @@ use Sasin91\WoWEmulatorCommunication\Commands\Events\CommandCreating;
 use Sasin91\WoWEmulatorCommunication\Commands\Events\CommandFired;
 use Sasin91\WoWEmulatorCommunication\Commands\Events\CommandFiring;
 
-/** 
- * Command events 
+/**
+ * Command events
  */
 trait HasEvents
 {
     /**
      * Array of Command events
-     * 
+     *
      * @var array
      */
     protected $events = [
@@ -25,14 +25,14 @@ trait HasEvents
         CommandFired::class
     ];
 
-	/**
-	 * Event dispatcher
-	 * 
-	 * @var \Illuminate\Contracts\Events\Dispatcher|null
-	 */
-	protected static $dispatcher;
+    /**
+     * Event dispatcher
+     *
+     * @var \Illuminate\Contracts\Events\Dispatcher|null
+     */
+    protected static $dispatcher;
 
-	/**
+    /**
      * Get the event dispatcher instance.
      *
      * @return \Illuminate\Contracts\Events\Dispatcher
@@ -65,23 +65,23 @@ trait HasEvents
 
     /**
      * Determine whether the Command has Events enabled.
-     * 
-     * @return boolean 
+     *
+     * @return boolean
      */
     public static function hasEventDispatcher()
     {
-    	return isset(static::$dispatcher);
+        return isset(static::$dispatcher);
     }
 
     /**
      * Determine whether the Command has a given Event.
-     * 
+     *
      * @param  string|object  $event
-     * @return boolean       
+     * @return boolean
      */
     public function hasEvent($event)
     {
-        if (! is_string($event) ) {
+        if (! is_string($event)) {
             $event = get_class($event);
         }
 
@@ -90,14 +90,14 @@ trait HasEvents
 
     /**
      * Register a command event.
-     * 
+     *
      * @param  object $event [Event class]
      * @return $this
      */
     public function registerCommandEvent($event)
     {
-        if (! $this->hasEvent($event) ) {
-            $this->events[] = $event;   
+        if (! $this->hasEvent($event)) {
+            $this->events[] = $event;
         }
 
         return $this;
@@ -116,7 +116,7 @@ trait HasEvents
             return true;
         }
 
-        if (! $this->hasEvent($event) ) {
+        if (! $this->hasEvent($event)) {
             return null;
         }
 
@@ -127,13 +127,12 @@ trait HasEvents
     /**
      * Determine the Event method to be used,
      * based on the halt state.
-     * 
+     *
      * @param  boolean $halt
      * @return string
      */
     protected function determineEventMethod($halt)
     {
-        return $halt ? 'until' : 'fire';   
+        return $halt ? 'until' : 'fire';
     }
-
 }

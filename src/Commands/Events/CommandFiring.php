@@ -9,20 +9,20 @@ namespace Sasin91\WoWEmulatorCommunication\Commands\Events;
 */
 class CommandFiring
 {
-	/**
-	 * EmulatorCommand instance
-	 * 
-	 * @var \Sasin91\WoWEmulatorCommunication\EmulatorCommandContract
-	 */
-	public $command;
+    /**
+     * EmulatorCommand instance
+     *
+     * @var \Sasin91\WoWEmulatorCommunication\EmulatorCommandContract
+     */
+    public $command;
 
-	/**
-	 * CommandFiring event constructor.
-	 * 
-	 * @param \Sasin91\WoWEmulatorCommunication\EmulatorCommandContract $command
-	 */
-	public function __construct($command)
-	{
-		$this->command = $command;
-	}
+    /**
+     * CommandFiring event constructor.
+     *
+     * @param \Sasin91\WoWEmulatorCommunication\EmulatorCommandContract $command
+     */
+    public function __construct($command)
+    {
+        $this->command = $command;
+    }
 }
