@@ -4,6 +4,7 @@ namespace Sasin91\WoWEmulatorCommunication;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
+use Sasin91\WoWEmulatorCommunication\EmulatorCommand;
 use Sasin91\WoWEmulatorCommunication\Facades\Emulators;
 
 /**
@@ -51,6 +52,8 @@ class EmulatorServiceProvider extends ServiceProvider
         $this->registerGenericDrivers();
 
         $this->aliasCommunicationPipes();
+
+        EmulatorCommand::setEventDispatcher($this->app['events']);
     }
 
     /**

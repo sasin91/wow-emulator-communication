@@ -2,6 +2,7 @@
 
 namespace Sasin91\WoWEmulatorCommunication\Tests\Unit;
 
+use Illuminate\Support\Testing\Fakes\EventFake;
 use Illuminate\Validation\ValidationException;
 use Orchestra\Testbench\TestCase;
 use Sasin91\WoWEmulatorCommunication\Commands\Events\CommandCreated;
@@ -14,6 +15,42 @@ use Sasin91\WoWEmulatorCommunication\Tests\Concerns\CommandTestTrait;
 class CommandEventsTest extends TestCase
 {
 	use CommandTestTrait;
+
+	/**
+	 * @covers Sasin91\WoWEmulatorCommunication\Commands\Concerns\HasEvents
+	 *
+	 * @test
+	 */
+	public function test_commands_have_events()
+	{
+		$this->assertEquals($this->app['events'], EmulatorCommand::getEventDispatcher());
+	}
+
+	/**
+	 * @covers Sasin91\WoWEmulatorCommunication\Commands\Concerns\HasEvents::unsetEventDispatcher
+	 *
+	 * @test
+	 */
+	public function can_disable_command_events()
+	{
+		EmulatorCommand::unsetEventDispatcher();
+
+		$this->assertNull(EmulatorCommand::getEventDispatcher());
+		$this->assertNull((new EmulatorCommand('test'))->getEventDispatcher());
+	}
+
+	/**
+	 * @covers Sasin91\WoWEmulatorCommunication\Commands\Concerns\HasEvents::setEventDispatcher
+	 *
+	 * @test
+	 */
+	public function can_swap_event_dispatcher()
+	{
+		EmulatorCommand::setEventDispatcher($events = new EventFake);
+
+		$this->assertEquals($events, EmulatorCommand::getEventDispatcher());
+		$this->assertEquals($events, (new EmulatorCommand('test'))->getEventDispatcher());
+	}
 
 	/**
 	 * @covers Sasin91\WoWEmulatorCommunication\Commands\Concerns\HasEvents@fireCommandEvent
