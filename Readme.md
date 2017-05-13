@@ -17,6 +17,7 @@ Remote API Communication package for WoW private servers
     - [Manager](#driver-manager)
 - [Testing](#testing)
 - [Events](#events)
+- [Issues](#issues)
 - [License](#license)
 
 <a name="installation" />
@@ -236,6 +237,16 @@ Additionally, it is possible to disable the events complete,
 by calling `EmulatorCommand::unsetEventDispatcher()`.
 In the same sense, it is also possible to replace the dispatcher,
 by calling `EmulatorCommand::setEventDispatcher($dispatcher)`.
+
+<a name="issues" />
+
+## Issues 
+
+If you discover any vulnerabilities, please e-mail them to me at jonas.kerwin.hansen@gmail.com.
+
+For issues, open a issue on Github.
+
+I'm currently aware of issues with proxy-driver-commands and testing.
 
 <a name="license" />
 
