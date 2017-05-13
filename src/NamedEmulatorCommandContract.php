@@ -18,6 +18,14 @@ interface NamedEmulatorCommandContract extends EmulatorCommandContract
      */
     public function driver();
 
+        /**
+     * Dispatch the command.
+     *
+     * @param  dynamic
+     * @return mixed [Response from remote API.]
+     */
+    public static function dispatch();
+
     /**
      * Dispatch the command.
      *

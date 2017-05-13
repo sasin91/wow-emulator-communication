@@ -12,6 +12,17 @@ trait NamedCommand
     use UsesContainer, ConcatenatesIntoCommandString;
 
     /**
+     * Dispatch the command.
+     *
+     * @param  dynamic
+     * @return mixed [Response from remote API.]
+     */
+    public static function dispatch()
+    {
+        return (new static(...func_get_args()))->fire();
+    }
+
+    /**
      * Fire the command
      *
      * @return mixed  Response from remote API.

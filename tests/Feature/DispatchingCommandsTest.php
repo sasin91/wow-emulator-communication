@@ -85,4 +85,17 @@ class DispatchingCommandsTest extends TestCase
 	    	\Emulators::fire(new CreateAccountCommand('john', 'secret'))
 	    );
 	}
+
+	/**
+	 * @covers Sasin91\WoWEmulatorCommunication\NamedEmulatorCommandContract@dispatch
+	 *
+	 * @test
+	 */
+	public function a_command_can_be_dispatch_itself()
+	{
+		$this->assertEquals(
+			EmulatorCommand::dispatch('account create hello world'),
+			CreateAccountCommand::dispatch('hello', 'world')
+		);
+	}
 }
