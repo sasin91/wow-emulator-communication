@@ -30,7 +30,7 @@ class EmulatorServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/emulator.php' => config_path()
+            __DIR__.'/../config/emulator.php' => config_path('emulator.php')
         ], 'wow.emulators');
     }
 
