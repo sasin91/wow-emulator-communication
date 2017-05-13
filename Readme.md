@@ -205,7 +205,19 @@ There isn't really that much to say about this, if you prefer depedency injectio
 <a name="testing" />
 
 ## Testing
-# TODO
+assertDispatched & assertNotDispatched is available when using the fake.
+
+```php
+    \Emulators::fake();
+
+    // perform command
+
+    \Emulators::assertDispatched(EmulatorCommand::class, function ($event) use ($command) {
+        return (string)$event === (string)$command;
+    });
+
+    \Emulators::assertNotDispatched(EmulatorCommand::class);
+```
 
 <a name="events" />
 

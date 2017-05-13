@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Str;
 use Sasin91\WoWEmulatorCommunication\EmulatorCommand;
 use Sasin91\WoWEmulatorCommunication\EmulatorManager;
+use Sasin91\WoWEmulatorCommunication\Testing\FakeEmulatorManager;
 
 class Emulators extends Facade
 {
@@ -21,6 +22,17 @@ class Emulators extends Facade
     {
         return EmulatorManager::class;
     }
+
+    /**
+     * Replace the bound instance with a fake.
+     *
+     * @return void
+     */
+    public static function fake()
+    {
+        static::swap(new FakeEmulatorManager(static::$app));
+    }
+
 
     /**
      * Get the registered name of the component.

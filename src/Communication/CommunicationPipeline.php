@@ -99,10 +99,13 @@ class CommunicationPipeline implements Pipeline
      */
     public function then(\Closure $destination)
     {
-        $pipeline = collect([$this->pipes])->reverse()
-            ->reduce($this->carry(), function ($passable) use ($destination) {
+        $pipeline = array_reduce(
+            array_reverse($this->pipes),
+            $this->carry(),
+            function ($passable) use ($destination) {
                 return $destination($passable);
-            });
+            }
+        );
 
         return $pipeline($this->command);
     }

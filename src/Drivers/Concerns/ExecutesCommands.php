@@ -43,7 +43,7 @@ trait ExecutesCommands
                 $command->validate();
             }
         });
-
+        
         return (new CommunicationPipeline)
             ->send($command)
             ->through(Arr::get($this->config, 'pipes', []))

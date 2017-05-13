@@ -35,20 +35,7 @@ trait CommandTestTrait
 	 */
 	protected function getEnvironmentSetUp($app)
 	{
-		$config = $app['config'];
-
-	    // Setup default emulator to a test double
-	    $config->set('emulator.default', 'testing');
-	    $config->set('emulator.drivers.testing', [
-	    	'handler' => FakeSoapClient::class,
-	    	'pipes'	  => [AssertCommandPassed::class]
-	    ]);
-
-	    // Setup testing-multiple driver
-	    $config->set('emulator.drivers.multiple-testing', ['testing']);
-
-	    // Enable driver command proxying
-	    $config->set('emulator.proxy-driver-commands', true);
+		//
 	}
 
     /**
@@ -60,15 +47,7 @@ trait CommandTestTrait
 	{
 		parent::setUp();
 
-		$this->manager = new EmulatorManager($this->app);
-
-		foreach (array_keys($this->app->config->get('emulator.drivers')) as $driver) {
-			$this->manager->extend(
-				$driver, $this->manager->genericDriverCallback($driver)
-			);
-		}
-
-		\Emulators::swap($this->manager);
+		\Emulators::fake();
 	}
 
 }

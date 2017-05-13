@@ -16,6 +16,7 @@ class DispatchingCommandsTest extends TestCase
 	 * @covers Sasin91\WoWEmulatorCommunication\Drivers\EmulatorCommunicationDriver::command()
 	 * @covers Sasin91\WoWEmulatorCommunication\Communication\CommunicationPipeline
 	 * @covers Sasin91\WoWEmulatorCommunication\Communication\CommunicationHandler::handle()
+	 * @covers Sasin91\WoWEmulatorCommunication\Testing\Concerns\ManagesDispatchedCommands
 	 * 
 	 * @test
 	 */
@@ -25,6 +26,10 @@ class DispatchingCommandsTest extends TestCase
 			'Hello world',
 			\Emulators::command(new EmulatorCommand('Hello', ['world']))
 		);
+
+		\Emulators::assertDispatched(EmulatorCommand::class, function($parameters) {
+			return $parameters === 'world';
+		});
 	}
 
 	/**
@@ -66,6 +71,8 @@ class DispatchingCommandsTest extends TestCase
 	 */
 	public function it_proxies_dynamic_commands()
 	{
+		$this->app->config->set('emulator.proxy-driver-commands', true);
+
 		$this->assertEquals(
 			"hello world how is it spinning?",
 			\Emulators::Testing('hello world', 'how is it spinning?')
