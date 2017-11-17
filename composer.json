@@ -29,5 +29,16 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true
+    },
+
+    "extra": {
+        "laravel": {
+	     "providers": [
+	     	"Sasin91\\WoWEmulatorCommunication\\EmulatorServiceProvider"
+	     ],
+	     "aliases": {
+	     	"Emulators": "Sasin91\\WoWEmulatorCommunication\\Facades\\Emulators"
+	     }
+	}
     }
 }
