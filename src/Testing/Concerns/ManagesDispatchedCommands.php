@@ -22,7 +22,7 @@ trait ManagesDispatchedCommands
      */
     public function addDispatchedCommand(EmulatorCommandContract $command)
     {
-        $this->commands[get_class($command)][] = $command->parameters();
+        $this->commands[get_class($command)][] = array_values($command->parameters());
     }
 
     /**
