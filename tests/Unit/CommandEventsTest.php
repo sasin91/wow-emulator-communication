@@ -46,7 +46,7 @@ class CommandEventsTest extends TestCase
 	 */
 	public function can_swap_event_dispatcher()
 	{
-		EmulatorCommand::setEventDispatcher($events = new EventFake);
+		EmulatorCommand::setEventDispatcher($events = $this->app->make(EventFake::class, []));
 
 		$this->assertEquals($events, EmulatorCommand::getEventDispatcher());
 		$this->assertEquals($events, (new EmulatorCommand('test'))->getEventDispatcher());
